@@ -40,6 +40,10 @@ func (s *Stream) Index() int {
 	return int(s.c.index)
 }
 
+func (s *Stream) SetIndex(index int) {
+	s.c.index = C.int(index)
+}
+
 func (s *Stream) Metadata() *Dictionary {
 	return newDictionaryFromC(s.c.metadata)
 }

@@ -118,7 +118,7 @@ func (fc *FormatContext) OutputFormat() *OutputFormat {
 }
 
 func (fc *FormatContext) Pb() *IOContext {
-	return newIOContextFromC(fc.c.pb)
+	return NewIOContextFromC(fc.c.pb)
 }
 
 func (fc *FormatContext) SetPb(i *IOContext) {
@@ -248,11 +248,13 @@ func (fc *FormatContext) SDPCreate() (string, error) {
 }
 
 func sdpCreate(fcs []*FormatContext) (string, error) {
-	return stringFromC(1024, func(buf *C.char, size C.size_t) error {
-		fccs := []*C.struct_AVFormatContext{}
-		for _, fc := range fcs {
-			fccs = append(fccs, fc.c)
-		}
-		return newError(C.av_sdp_create(&fccs[0], C.int(len(fcs)), buf, C.int(size)))
-	})
+	return stringFromC(
+		1024, func(buf *C.char, size C.size_t) error {
+			fccs := []*C.struct_AVFormatContext{}
+			for _, fc := range fcs {
+				fccs = append(fccs, fc.c)
+			}
+			return newError(C.av_sdp_create(&fccs[0], C.int(len(fcs)), buf, C.int(size)))
+		},
+	)
 }

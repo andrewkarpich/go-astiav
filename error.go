@@ -45,17 +45,18 @@ const (
 )
 
 func newError(ret C.int) error {
-	i := int(ret)
-	if i >= 0 {
+	if ret >= 0 {
 		return nil
 	}
-	return Error(i)
+	return Error(ret)
 }
 
 func (e Error) Error() string {
-	s, _ := stringFromC(255, func(buf *C.char, size C.size_t) error {
-		return newError(C.av_strerror(C.int(e), buf, size))
-	})
+	s, _ := stringFromC(
+		255, func(buf *C.char, size C.size_t) error {
+			return newError(C.av_strerror(C.int(e), buf, size))
+		},
+	)
 	return s
 }
 

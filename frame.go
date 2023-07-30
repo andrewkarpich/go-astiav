@@ -144,6 +144,11 @@ func (f *Frame) Width() int {
 	return int(f.c.width)
 }
 
+func (f *Frame) Duration() int64 {
+	// pkt_duration deprecated -> duration
+	return int64(f.c.pkt_duration)
+}
+
 func (f *Frame) SetWidth(w int) {
 	f.c.width = C.int(w)
 }
